@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!--ICON LINK-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css">
+
+    <!--CSS-->
+    <link rel="stylesheet" href="css/index_style.css">
+
+    <title>Login Page</title>
+</head>
+<body>
+    <!--ANIMATED BACKGROUND-->
+    <div class="area" >
+            <ul class="circles">
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li></li>
+            </ul>
+    </div >
+
+    <!--LOGIN/login-->
+    <section class="login">
+        <div class="login__content">
+            
+            <!--LOGIN FORM-->
+            <div class="login__container" id="login__container">
+                <h2 class="login__title">Welcome back👋</h2>
+
+                <!--FORM-->
+                <form action="" method="post" class="login__form">
+
+                    <div class="login__group">
+                        <!--EMAIL-->
+                        <div class="login__box">
+                            <i class="ri-mail-line login__icon"></i>
+                            <input type="email" name="email" autocomplete="email" 
+                                required placeholder=" " class="login__input" id="email">
+                            <label for="email" class="login__label">Email</label>
+                        </div>
+
+                        <!--PASSWORD-->
+                        <div class="login__box">
+                            <i class="ri-lock-2-fill login__icon"></i>
+                            <input type="password" name="password" autocomplete="current-password" 
+                                required placeholder=" " class="login__input" id="login_password">
+                            <label for="password" class="login__label">Password</label>
+                        </div>
+                    </div>
+
+                    <!--FORGET PASSWORD BUTTON-->
+                    <a href="#" class="login__forget">Forget Password</a>
+
+                    <!--LOGIN BUTTON-->
+                    <button type="submit" class="login__button">
+                        Log In <i class="ri-send-plane-2-fill"></i>
+                    </button>
+
+                    <!--DON'T HAVE AN ACCOUNT BUTTON-->
+                    <p class="login__sign">
+                        Don't have an account? <a href="#" id="signup-btn">Sign Up</a>
+                    </p>
+                    
+                </form>
+            </div>
+
+            <div class="signup__container" id="signup__container">
+                <!--SIGN UP FORM-->
+                <h2 class="login__title">Welcome 👋</h2>
+                
+                <!--FORM-->
+                <form action="" method="post" class="login__form">
+                    <div class="login__group">
+                        <!--FIRST NAME-->
+                        <div class="login__box">
+                            <i class="ri-user-line login__icon"></i>
+                            <input type="text" name="first_name" autocomplete="first_name"
+                                required placeholder=" " class="login__input" id="first_name">
+                            <label for="first_name" class="login__label">First Name</label>
+                        </div>
+
+                        <!--LAST-->
+                        <div class="login__box">
+                            <i class="ri-user-line login__icon"></i>
+                            <input type="text" name="last_name" autocomplete="last_name"
+                                required placeholder=" " class="login__input" id="last_name">
+                            <label for="last_name" class="login__label">Last Name</label>
+                        </div>
+
+                        <!--PASSWORD-->
+                        <div class="login__box">
+                            <i class="ri-lock-2-fill login__icon"></i>
+                            <input type="password" name="password" autocomplete="current-password"
+                                required placeholder=" " class="login__input" id="signup_password">
+                            <label for="password" class="login__label">Password</label>
+                        </div>
+
+                        <!--CONFIRM PASSWORD-->
+                        <div class="login__box">
+                            <i class="ri-lock-2-fill login__icon"></i>
+                            <input type="password" name="password" autocomplete="current-password"
+                                required placeholder=" " class="login__input" id="confirm_password">
+                            <label for="password" class="login__label">Confirm Password</label>
+                        </div>
+
+                    </div>
+
+                    <!--SIGN UP BUTTON-->
+                    <button type="submit" class="login__button">
+                        Sign Up <i class="ri-send-plane-2-fill"></i>
+                    </button>
+
+                    <!--Already have an account?-->
+                    <p class="login__sign">
+                        Already have an account? <a href="#" id="back-login-btn">Login</a>
+                    </p>
+
+                </form>
+
+            </div>
+
+            <!--IMG-->
+            <div class="login__image">
+                <img src="img/rydah-waves.png" alt="" class="login__img login__img--login">
+            </div>
+
+        </div>
+    </section>
+
+    <!--GSAP LINK-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+
+    <!--MAIN JS-->
+    <script src="js/main.js"></script>
+    
+</body>
+</html>
