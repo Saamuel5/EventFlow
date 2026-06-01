@@ -32,14 +32,6 @@ The system demonstrates Agile methodology, GitHub collaboration, and version con
 5. CSS 
 
 6. JavaScript
-## Project Tools
-
-- GitHub
-- Git Bash
-- Visual Studio Code
-- HTML
-- CSS
-- JavaScript
 
 ---
 
