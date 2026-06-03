@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--ICON LINK-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css">
+
+    <!--CSS-->
+    <link rel="stylesheet" href="css/taskboard_style.css">
+
+    <title>Tasks</title>
+</head>
+<body>
+    <div class="container">
+        <!--SIDEBAR-->
+        <aside>
+            <!--LOGO-->
+            <div class="top">
+                <div class="logo">
+                    <img src="img/event_flow3_trans_logo.png" alt="">
+                    <h2>Event <span class="main-color">Flow</span> </h2>
+                </div>
+                <div class="close" id="close-btn">
+                    <i class="ri-close-large-line"></i>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <a href="taskboard2.html" class="active">
+                    <i class="ri-todo-line"></i>
+                    <h3>Tasks</h3>
+                </a>
+                <a href="#">
+                    <i class="ri-logout-box-r-line"></i>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+        </aside>
+
+        <!--MAIN SECTION-->
+        <main>
+            <h1>Tasks</h1>
+
+            <div class="date">
+                <i class="ri-calendar-line"></i>
+                <span id="current-date"></span>
+            </div>
+
+            <!-- RECENT TASKS CARD -->
+            <div class="recent-tasks">
+
+                <!-- HEADER (FILTER + BUTTON) -->
+                <div class="recent-tasks-header">
+                    <div class="task-controls">
+                        
+                        <span class="filter-label">Filter:</span>
+                        <select class="task-filter">
+                            <option>All Tasks</option>
+                            <option>Completed</option>
+                            <option>In Progress</option>
+                            <option>Overdue</option>
+                        </select>
+
+                        <button class="add-task-btn" id="openModal">
+                            <i class="ri-add-line"></i>
+                            Add Task
+                        </button>
+
+                    </div>
+                </div>
+
+                <!-- TABLE -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Event Area</th>
+                            <th>Assigned To</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="taskTableBody"></tbody>
+                </table>
+
+            </div>
+
+            <!--ADD TASK FORM-->
+            <div class="modal" id="taskModal">
+                <div class="wrapper">
+                    <button class="close-modal" id="closeModal">
+                            <i class="ri-close-line"></i>
+                    </button>
+
+                    <div class="form-header">
+                        <div class="titles">
+                            <div class="title-add-tasks">Add Task</div><!--title login-->
+                        </div>
+                    </div>
+
+                    <form action="" class="add-task-form" autocomplete="off"> <!--login-form-->
+                        
+                        <!--TASK NAME-->
+                        <div class="input-box">
+                            <input type="text" class="input-field" id="task-name" required>
+                            <label for="task-name" class="label">Task Name</label>
+                            <i class="ri-todo-line icon"></i>
+                        </div>
+
+                        <!--EVENT AREA-->
+                        <div class="input-box">
+                            <input type="text" class="input-field" id="event-area" required>
+                            <label for="event-area" class="label">Event Area</label>
+                            <i class="ri-calendar-event-line icon"></i>
+                        </div>
+
+                        <!--ASSIGNED TO-->
+                        <div class="input-box">
+                            <select class="input-field" id="assigned-to" required>
+                                <option value="">Select User</option>
+                                <option value="Ali">Ali</option>
+                                <option value="Sarah">Sarah</option>
+                                <option value="John">John</option>
+                            </select>
+                            <i class="ri-user-line icon"></i>
+                        </div>
+
+                        <!--DATE-->
+                        <div class="input-box">
+                            <input type="date" class="input-field" id="due-date" required>
+                        </div>
+
+                        <!--STATUS-->
+                        <div class="input-box">
+                            <select class="input-field" id="status" required>
+                                <option value="">Select Status</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Overdue">Overdue</option>
+                            </select>
+                        </div>
+
+
+                        <div class="input-box">
+                            <button type="submit" class="btn-submit" id="AddTask">Add Task <i class="ri-add-large-line"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+        <!--TOP OF THIRD SECTION-->
+        <div class="right">
+            <div class="top">
+                <button id="menu-btn">
+                    <i class="ri-menu-line"></i>
+                </button>
+                <div class="theme-toggler">
+                    <i class="ri-sun-fill active"></i>
+                    <i class="ri-moon-fill"></i>
+                </div>
+                <div class="profile">
+                    <div class="info">
+                        <p>Hey, <b>Shanjana</b></p>
+                        <small class="text-muted">Admin</small>
+                    </div>
+                    <div class="profile-photo">
+                        <img src="img/user.png" alt="">
+                    </div>
+                </div>
+            </div>
+
+            <!--UPCOMING DEADLINES-->
+            <div class="upcoming-deadlines"> <!--recent updates-->
+                <h2><b>Upcoming Deadlines</b></h2>
+                <div class="deadlines"> <!--updates-->
+                    <div class="deadline"> <!--update-->
+                        <div class="message">
+                            <p><b>Confirm Catering</b></p>
+                            <small class="text-muted">Wedding Planning</small><br>
+                            <small class="text-muted">Assigned to Sarah • Due in 2 days</small>
+                        </div>
+                        <div class="message">
+                            <p><b>Confirm Catering</b></p>
+                            <small class="text-muted">Wedding Planning</small><br>
+                            <small class="text-muted">Assigned to Sarah • Due in 2 days</small>
+                        </div>
+                        <div class="message">
+                            <p><b>Confirm Catering</b></p>
+                            <small class="text-muted">Wedding Planning</small><br>
+                            <small class="text-muted">Assigned to Sarah • Due in 2 days</small>
+                        </div>
+                        
+                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- TASK OVERVIEW -->
+            <div class="task-overview">
+                <h2><b>Task Overview</b></h2>
+
+                <div class="overview-card">
+                    <div class="progress-container">
+                        <div class="progress-circle">
+                            <span>80%</span>
+                        </div>
+                    </div>
+
+                    <div class="task-stats">
+                        <div class="stat">
+                            <span class="completed-dot"></span>
+                            <p>Completed <b>16</b></p>
+                        </div>
+
+                        <div class="stat">
+                            <span class="progress-dot"></span>
+                            <p>In Progress <b>3</b></p>
+                        </div>
+
+                        <div class="stat">
+                            <span class="overdue-dot"></span>
+                            <p>Overdue <b>1</b></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <script src="js/taskboard.js"></script>
+</body>
+</html>
