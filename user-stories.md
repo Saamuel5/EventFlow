@@ -12,5 +12,8 @@
 | 6 | As a user, I want to delete tasks I no longer need so i can keep my task list organized. | Medium | 3 | Sprint 2 |
 | 7 | As a user, I want to mark task status (To Do → In Progress → Done) so that I can track task completion status. | High | 8 | Sprint 2 |
 | 8 | As a user, I want to filter tasks based on their status so that I can quickly find specific tasks. | Medium | 5 | Sprint 2 |
-| 9 | As a user, I want to view task statistics dashboard so that I can monitor my overall task completion progress| Low | 5 | Sprint 2 |
+| 9 | As a user, I want to view task statistics dashboard so that I can monitor my overall task completion progress. | Low | 5 | Sprint 2 |
+| 7 | As a user, I want to mark task status (To Do → In Progress → Done) so that I can track task completion status. | High | 8 | Sprint 2 |
+| 8 | As a user, I want to filter tasks based on their status so that I can quickly find specific tasks. | Medium | 5 | Sprint 2 |
+| 9 | As a user, I want to view task statistics dashboard so that I can monitor my overall task completion progress.| Low | 5 | Sprint 2 |
 
