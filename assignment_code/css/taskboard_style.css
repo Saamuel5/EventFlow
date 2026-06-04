@@ -671,6 +671,9 @@ main .recent-tasks a{
     border: 1px solid var(--color-primary);
     box-shadow: var(--box-shadow);
     transition: 0.3s;
+    transform: scale(0.85);
+    opacity: 0;
+    animation: popIn 0.25s ease forwards;
 }
 
 .form-header{
@@ -834,6 +837,109 @@ main .recent-tasks a{
 .close-modal:hover{
     background: var(--color-primary);
     color: white;
+}
+
+.confirm-modal{
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    backdrop-filter: blur(4px);
+}
+
+/* show modal */
+.confirm-modal.active{
+    display: flex;
+}
+
+/* CARD */
+.confirm-box{
+    width: 320px;
+    background: var(--color-white);
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    animation: popIn 0.25s ease;
+}
+
+/* ICON */
+.confirm-icon{
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    background: rgba(255, 119, 130, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-danger);
+    font-size: 1.6rem;
+}
+
+/* TITLE */
+.confirm-box h3{
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    color: var(--color-dark);
+}
+
+/* TEXT */
+.confirm-box p{
+    font-size: 0.9rem;
+    color: var(--color-dark-variant);
+    margin-bottom: 1.5rem;
+}
+
+/* BUTTONS */
+.confirm-actions{
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+/* CANCEL BUTTON */
+.btn-cancel{
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    background: var(--color-info-light);
+    color: var(--color-dark);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-cancel:hover{
+    background: var(--color-info-dark);
+    color: white;
+}
+
+/* DELETE BUTTON */
+.btn-delete{
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    background: var(--color-danger);
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-delete:hover{
+    opacity: 0.85;
+}
+
+/* animation */
+@keyframes popIn{
+    from{
+        transform: scale(0.85);
+        opacity: 0;
+    }
+    to{
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 /*MEDIA*/

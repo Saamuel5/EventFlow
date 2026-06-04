@@ -22,6 +22,17 @@ const tableBody = document.getElementById("taskTableBody");
 
 const addTaskBtn = document.getElementById("AddTask");
 
+// ✅ NEW: modal title
+const modalTitle = document.getElementById("modalTitle");
+
+
+// DELETE CONFIRMATION MODAL
+const confirmModal = document.getElementById("confirmModal");
+const cancelDelete = document.getElementById("cancelDelete");
+const confirmDeleteBtn = document.getElementById("confirmDelete");
+
+let rowToDelete = null;
+
 // TRACK EDIT MODE
 let editingRow = null;
 
@@ -34,6 +45,9 @@ openModal.addEventListener("click", () => {
     form.reset();
 
     addTaskBtn.innerHTML = 'Add Task <i class="ri-add-large-line"></i>';
+
+    // ✅ NEW
+    modalTitle.textContent = "Add Task";
 });
 
 
@@ -45,6 +59,9 @@ closeModal.addEventListener("click", () => {
     form.reset();
 
     addTaskBtn.innerHTML = 'Add Task <i class="ri-add-large-line"></i>';
+
+    // ✅ NEW
+    modalTitle.textContent = "Add Task";
 });
 
 
@@ -66,7 +83,6 @@ form.addEventListener("submit", function (e) {
         editingRow.cells[2].textContent = assignedTo;
         editingRow.cells[3].textContent = dueDate;
 
-        // ✅ FIX: update status BOTH UI + dataset
         editingRow.setAttribute("data-status", status);
 
         editingRow.cells[4].innerHTML = `
@@ -83,7 +99,6 @@ form.addEventListener("submit", function (e) {
         // ADD MODE
         const row = document.createElement("tr");
 
-        // ✅ STORE RAW STATUS HERE
         row.setAttribute("data-status", status);
 
         row.innerHTML = `
@@ -111,11 +126,14 @@ form.addEventListener("submit", function (e) {
         tableBody.appendChild(row);
     }
 
-    // reset UI
+    // Reset UI
     form.reset();
     modal.classList.remove("active");
 
     addTaskBtn.innerHTML = 'Add Task <i class="ri-add-large-line"></i>';
+
+    // ✅ NEW
+    modalTitle.textContent = "Add Task";
 });
 
 
@@ -124,7 +142,10 @@ tableBody.addEventListener("click", function (e) {
 
     // DELETE
     if (e.target.closest(".delete-btn")) {
-        e.target.closest("tr").remove();
+
+        rowToDelete = e.target.closest("tr");
+
+        confirmModal.classList.add("active");
     }
 
     // EDIT
@@ -144,12 +165,33 @@ tableBody.addEventListener("click", function (e) {
         document.getElementById("due-date").value =
             editingRow.cells[3].textContent;
 
-        // ✅ FIX: get clean value from dataset (NOT table text)
         document.getElementById("status").value =
             editingRow.getAttribute("data-status");
 
         modal.classList.add("active");
 
         addTaskBtn.innerHTML = 'Save Changes <i class="ri-save-line"></i>';
+
+        // ✅ NEW
+        modalTitle.textContent = "Edit Task";
     }
+});
+
+
+// CANCEL DELETE
+cancelDelete.addEventListener("click", () => {
+    confirmModal.classList.remove("active");
+    rowToDelete = null;
+});
+
+
+// CONFIRM DELETE
+confirmDeleteBtn.addEventListener("click", () => {
+
+    if (rowToDelete) {
+        rowToDelete.remove();
+    }
+
+    confirmModal.classList.remove("active");
+    rowToDelete = null;
 });

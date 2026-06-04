@@ -28,7 +28,7 @@
             </div>
 
             <div class="sidebar">
-                <a href="taskboard2.html" class="active">
+                <a href="taskboard.html" class="active">
                     <i class="ri-todo-line"></i>
                     <h3>Tasks</h3>
                 </a>
@@ -98,7 +98,7 @@
 
                     <div class="form-header">
                         <div class="titles">
-                            <div class="title-add-tasks">Add Task</div><!--title login-->
+                            <div class="title-add-tasks" id="modalTitle">Add Task</div><!--title login-->
                         </div>
                     </div>
 
@@ -151,6 +151,23 @@
                     </form>
                 </div>
             </div>
+
+            <div class="confirm-modal" id="confirmModal">
+                <div class="confirm-box">
+                    <div class="confirm-icon">
+                        <i class="ri-delete-bin-line"></i>
+                    </div>
+
+                    <h3>Delete Task?</h3>
+                    <p>This action cannot be undone. Do you want to continue?</p>
+
+                    <div class="confirm-actions">
+                        <button id="cancelDelete" class="btn-cancel">Cancel</button>
+                        <button id="confirmDelete" class="btn-delete">Delete</button>
+                    </div>
+                </div>
+            </div>
+            
         </main>
 
         <!--TOP OF THIRD SECTION-->
