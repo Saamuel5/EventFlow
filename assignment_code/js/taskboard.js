@@ -325,6 +325,27 @@ confirmDeleteBtn.addEventListener("click", () => {
     rowToDelete = null;
 });
 
+// ===============================
+// LOGOUT MODAL
+// ===============================
+
+const logoutBtn = document.getElementById("logoutBtn");
+const logoutModal = document.getElementById("logoutModal");
+const cancelLogout = document.getElementById("cancelLogout");
+const confirmLogout = document.getElementById("confirmLogout");
+
+logoutBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    logoutModal.classList.add("active");
+});
+
+cancelLogout.addEventListener("click", () => {
+    logoutModal.classList.remove("active");
+});
+
+confirmLogout.addEventListener("click", () => {
+    window.location.href = "index.html"; // or login page
+});
 
 // ===============================
 // INITIAL LOAD
