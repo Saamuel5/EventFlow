@@ -196,6 +196,21 @@ closeModal.addEventListener("click", () => {
 });
 
 
+function sortTasksByDate() {
+
+    const rows = Array.from(tableBody.querySelectorAll("tr"));
+
+    rows.sort((a, b) => {
+
+        const dateA = new Date(a.cells[3].textContent);
+        const dateB = new Date(b.cells[3].textContent);
+
+        return dateA - dateB; // earliest date first
+    });
+
+    rows.forEach(row => tableBody.appendChild(row));
+}
+
 // ===============================
 // SUBMIT FORM
 // ===============================
@@ -231,6 +246,7 @@ form.addEventListener("submit", function (e) {
         editingRow = null;
 
         // 🔥 FORCE UI REFRESH
+        sortTasksByDate();
         updateUpcomingDeadlines();
         updateTaskOverview();
         filterTasks();
@@ -266,6 +282,7 @@ form.addEventListener("submit", function (e) {
     addTaskBtn.innerHTML = 'Add Task <i class="ri-add-large-line"></i>';
     modalTitle.textContent = "Add Task";
 
+    sortTasksByDate();
     updateUpcomingDeadlines();
     updateTaskOverview();
     filterTasks();
@@ -321,6 +338,7 @@ confirmDeleteBtn.addEventListener("click", () => {
 
     if (rowToDelete) rowToDelete.remove();
 
+    sortTasksByDate();
     updateUpcomingDeadlines();
     updateTaskOverview();
     filterTasks();
@@ -376,6 +394,7 @@ confirmLogout.addEventListener("click", () => {
 // ===============================
 // INITIAL LOAD
 // ===============================
+sortTasksByDate();
 updateUpcomingDeadlines();
 updateTaskOverview();
 filterTasks();
