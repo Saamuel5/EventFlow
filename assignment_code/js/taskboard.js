@@ -35,6 +35,54 @@ let editingRow = null;
 
 
 // ===============================
+// MULTI USER SYSTEM
+// ===============================
+let assignedUsers = [];
+
+const assignedSelect = document.getElementById("assigned-to");
+
+const selectedUsersContainer = document.getElementById("selected-users");
+selectedUsersContainer.style.display = "flex";
+selectedUsersContainer.style.flexWrap = "wrap";
+selectedUsersContainer.style.gap = "6px";
+selectedUsersContainer.style.marginBottom = "8px";
+
+function renderAssignedUsers() {
+    selectedUsersContainer.innerHTML = "";
+
+    assignedUsers.forEach((user, index) => {
+        const tag = document.createElement("span");
+        tag.textContent = user;
+
+        tag.style.padding = "4px 10px";
+        tag.style.borderRadius = "20px";
+        tag.style.background = "#991bdd";
+        tag.style.color = "white";
+        tag.style.fontSize = "12px";
+        tag.style.cursor = "pointer";
+
+        tag.onclick = () => {
+            assignedUsers.splice(index, 1);
+            renderAssignedUsers();
+        };
+
+        selectedUsersContainer.appendChild(tag);
+    });
+}
+
+assignedSelect.addEventListener("change", () => {
+    const value = assignedSelect.value;
+
+    if (value && !assignedUsers.includes(value)) {
+        assignedUsers.push(value);
+        renderAssignedUsers();
+    }
+
+    assignedSelect.value = "";
+});
+
+
+// ===============================
 // TASK OVERVIEW ELEMENTS
 // ===============================
 const completedCountEl = document.getElementById("completedCount");
@@ -45,26 +93,46 @@ const progressCircle = document.getElementById("progressCircle");
 
 const taskFilter = document.querySelector(".task-filter");
 
+
 // ===============================
-// SMOOTH PROGRESS ANIMATION
+// OPEN / CLOSE MODAL (FIXED)
+// ===============================
+openModal.addEventListener("click", () => {
+    modal.classList.add("active");
+    editingRow = null;
+    form.reset();
+    assignedUsers = [];
+    renderAssignedUsers();
+
+    addTaskBtn.innerHTML = 'Add Task <i class="ri-add-large-line"></i>';
+    modalTitle.textContent = "Add Task";
+});
+
+closeModal.addEventListener("click", () => {
+    modal.classList.remove("active");
+    editingRow = null;
+    form.reset();
+    assignedUsers = [];
+    renderAssignedUsers();
+});
+
+
+// ===============================
+// PROGRESS ANIMATION
 // ===============================
 function animateProgressCircle(targetPercent) {
 
-    let start = 0;
-    const duration = 800; // animation speed (ms)
     const startTime = performance.now();
+    const duration = 800;
 
     function animate(now) {
 
         const elapsed = now - startTime;
         const progress = Math.min(elapsed / duration, 1);
-
         const currentPercent = Math.round(progress * targetPercent);
 
-        // text update
         progressPercentEl.textContent = `${currentPercent}%`;
 
-        // circle update
         progressCircle.style.background = `
             conic-gradient(
                 var(--color-primary) 0% ${currentPercent}%,
@@ -72,9 +140,7 @@ function animateProgressCircle(targetPercent) {
             )
         `;
 
-        if (progress < 1) {
-            requestAnimationFrame(animate);
-        }
+        if (progress < 1) requestAnimationFrame(animate);
     }
 
     requestAnimationFrame(animate);
@@ -90,51 +156,42 @@ function updateUpcomingDeadlines() {
     if (!deadlineContainer) return;
 
     deadlineContainer.innerHTML = "";
-    void deadlineContainer.offsetHeight;
 
     const rows = tableBody.querySelectorAll("tr");
-
     const now = new Date();
     let upcomingFound = false;
 
     rows.forEach(row => {
 
         const status = row.getAttribute("data-status");
-
         if (status?.toLowerCase() !== "in progress") return;
 
         const taskName = row.cells[0].textContent;
         const eventArea = row.cells[1].textContent;
         const assignedTo = row.cells[2].textContent;
-
         const dueDate = new Date(row.cells[3].textContent);
 
-        const daysRemaining =
-            Math.ceil((dueDate - now) / (1000 * 60 * 60 * 24));
+        const daysRemaining = Math.ceil((dueDate - now) / (1000 * 60 * 60 * 24));
 
         if (daysRemaining >= 0 && daysRemaining <= 7) {
 
             upcomingFound = true;
 
-            const deadlineItem = document.createElement("div");
-            deadlineItem.classList.add("deadline-item");
+            const item = document.createElement("div");
+            item.classList.add("deadline-item");
 
-            deadlineItem.innerHTML = `
+            item.innerHTML = `
                 <p><b>${taskName}</b></p>
-                <small class="text-muted">${eventArea}</small><br>
-                <small class="text-muted">
-                    Assigned to ${assignedTo} • Due in ${daysRemaining}
-                    day${daysRemaining !== 1 ? "s" : ""}
-                </small>
+                <small>${eventArea}</small><br>
+                <small>Assigned to ${assignedTo} • Due in ${daysRemaining} day(s)</small>
             `;
 
-            deadlineContainer.appendChild(deadlineItem);
+            deadlineContainer.appendChild(item);
         }
     });
 
     if (!upcomingFound) {
-        deadlineContainer.innerHTML =
-            `<p class="text-muted">No upcoming deadlines.</p>`;
+        deadlineContainer.innerHTML = `<p class="text-muted">No upcoming deadlines.</p>`;
     }
 }
 
@@ -161,55 +218,30 @@ function updateTaskOverview() {
 
     const total = completed + inProgress + overdue;
 
-    const percent = total === 0
-        ? 0
-        : Math.round((completed / total) * 100);
+    const percent = total === 0 ? 0 : Math.round((completed / total) * 100);
 
     completedCountEl.textContent = completed;
     progressCountEl.textContent = inProgress;
     overdueCountEl.textContent = overdue;
 
-    // 🔥 smooth animation instead of instant change
     animateProgressCircle(percent);
 }
 
 
 // ===============================
-// MODAL CONTROLS
+// SORT
 // ===============================
-openModal.addEventListener("click", () => {
-    modal.classList.add("active");
-    editingRow = null;
-    form.reset();
-
-    addTaskBtn.innerHTML = 'Add Task <i class="ri-add-large-line"></i>';
-    modalTitle.textContent = "Add Task";
-});
-
-closeModal.addEventListener("click", () => {
-    modal.classList.remove("active");
-    editingRow = null;
-    form.reset();
-
-    addTaskBtn.innerHTML = 'Add Task <i class="ri-add-large-line"></i>';
-    modalTitle.textContent = "Add Task";
-});
-
-
 function sortTasksByDate() {
 
     const rows = Array.from(tableBody.querySelectorAll("tr"));
 
-    rows.sort((a, b) => {
-
-        const dateA = new Date(a.cells[3].textContent);
-        const dateB = new Date(b.cells[3].textContent);
-
-        return dateA - dateB; // earliest date first
-    });
+    rows.sort((a, b) =>
+        new Date(a.cells[3].textContent) - new Date(b.cells[3].textContent)
+    );
 
     rows.forEach(row => tableBody.appendChild(row));
 }
+
 
 // ===============================
 // SUBMIT FORM
@@ -219,37 +251,28 @@ form.addEventListener("submit", function (e) {
 
     const taskName = document.getElementById("task-name").value;
     const eventArea = document.getElementById("event-area").value;
-    const assignedTo = document.getElementById("assigned-to").value;
     const dueDate = document.getElementById("due-date").value;
     const status = document.getElementById("status").value;
+
+    const assignedText = assignedUsers.join(", ");
 
     if (editingRow) {
 
         editingRow.cells[0].textContent = taskName;
         editingRow.cells[1].textContent = eventArea;
-        editingRow.cells[2].textContent = assignedTo;
+        editingRow.cells[2].textContent = assignedText;
         editingRow.cells[3].textContent = dueDate;
 
-        // IMPORTANT: normalize status
-        const cleanStatus = status.trim();
+        editingRow.setAttribute("data-status", status);
 
-        editingRow.setAttribute("data-status", cleanStatus);
-
-        // FORCE FULL REBUILD of status cell (fix visual bug)
         editingRow.cells[4].innerHTML = `
-            <span class="status ${cleanStatus.toLowerCase().replace(/\s/g, '-')}">
+            <span class="status ${status.toLowerCase().replace(/\s/g, '-')}">
                 <i class="ri-circle-fill status-icon"></i>
-                ${cleanStatus}
+                ${status}
             </span>
         `;
 
         editingRow = null;
-
-        // 🔥 FORCE UI REFRESH
-        sortTasksByDate();
-        updateUpcomingDeadlines();
-        updateTaskOverview();
-        filterTasks();
 
     } else {
 
@@ -259,7 +282,7 @@ form.addEventListener("submit", function (e) {
         row.innerHTML = `
             <td>${taskName}</td>
             <td>${eventArea}</td>
-            <td>${assignedTo}</td>
+            <td>${assignedText}</td>
             <td>${dueDate}</td>
             <td>
                 <span class="status ${status.toLowerCase().replace(/\s/g, '-')}">
@@ -277,10 +300,10 @@ form.addEventListener("submit", function (e) {
     }
 
     form.reset();
-    modal.classList.remove("active");
+    assignedUsers = [];
+    renderAssignedUsers();
 
-    addTaskBtn.innerHTML = 'Add Task <i class="ri-add-large-line"></i>';
-    modalTitle.textContent = "Add Task";
+    modal.classList.remove("active");
 
     sortTasksByDate();
     updateUpcomingDeadlines();
@@ -303,25 +326,17 @@ tableBody.addEventListener("click", function (e) {
 
         editingRow = e.target.closest("tr");
 
-        document.getElementById("task-name").value =
-            editingRow.cells[0].textContent;
+        document.getElementById("task-name").value = editingRow.cells[0].textContent;
+        document.getElementById("event-area").value = editingRow.cells[1].textContent;
 
-        document.getElementById("event-area").value =
-            editingRow.cells[1].textContent;
+        assignedUsers = editingRow.cells[2].textContent.split(", ").filter(Boolean);
+        renderAssignedUsers();
 
-        document.getElementById("assigned-to").value =
-            editingRow.cells[2].textContent;
-
-        document.getElementById("due-date").value =
-            editingRow.cells[3].textContent;
-
-        document.getElementById("status").value =
-            editingRow.getAttribute("data-status");
+        document.getElementById("due-date").value = editingRow.cells[3].textContent;
+        document.getElementById("status").value = editingRow.getAttribute("data-status");
 
         modal.classList.add("active");
-
-        addTaskBtn.innerHTML = 'Save Changes <i class="ri-save-line"></i>';
-        modalTitle.textContent = "Edit Task";
+        addTaskBtn.innerHTML = "Save Changes";
     }
 });
 
@@ -347,6 +362,10 @@ confirmDeleteBtn.addEventListener("click", () => {
     rowToDelete = null;
 });
 
+
+// ===============================
+// FILTER
+// ===============================
 function filterTasks() {
 
     const selectedFilter = taskFilter.value;
@@ -356,43 +375,18 @@ function filterTasks() {
 
         const status = row.getAttribute("data-status");
 
-        if (
-            selectedFilter === "All Tasks" ||
-            status === selectedFilter
-        ) {
-            row.style.display = "";
-        } else {
-            row.style.display = "none";
-        }
+        row.style.display =
+            selectedFilter === "All Tasks" || status === selectedFilter
+                ? ""
+                : "none";
     });
 }
 
 taskFilter.addEventListener("change", filterTasks);
 
-// ===============================
-// LOGOUT MODAL
-// ===============================
-
-const logoutBtn = document.getElementById("logoutBtn");
-const logoutModal = document.getElementById("logoutModal");
-const cancelLogout = document.getElementById("cancelLogout");
-const confirmLogout = document.getElementById("confirmLogout");
-
-logoutBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    logoutModal.classList.add("active");
-});
-
-cancelLogout.addEventListener("click", () => {
-    logoutModal.classList.remove("active");
-});
-
-confirmLogout.addEventListener("click", () => {
-    window.location.href = "index.html"; // or login page
-});
 
 // ===============================
-// INITIAL LOAD
+// INIT
 // ===============================
 sortTasksByDate();
 updateUpcomingDeadlines();
