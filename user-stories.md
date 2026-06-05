@@ -13,6 +13,6 @@
 | 7 | As a user, I want to mark task status (In Progress → Completed → Overdue) so that I can track task completion status. | High | 8 | Sprint 2 |
 | 8 | As a user, I want to filter tasks based on their status so that I can quickly find specific tasks. | Medium | 5 | Sprint 2 |
 | 9 | As a user, I want to view task statistics dashboard so that I can monitor my overall task completion progress. | Low | 5 | Sprint 2 |
-
+| 10 | As a user, I want to lougout after done with tasks. | Low | 5 | Sprint 2 |
 
 
