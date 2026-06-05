@@ -12,7 +12,9 @@ const options = {
 currentDate.textContent = today.toLocaleDateString("en-US", options);
 
 
-// Modal controls
+// ===============================
+// DOM ELEMENTS
+// ===============================
 const openModal = document.getElementById("openModal");
 const closeModal = document.getElementById("closeModal");
 const modal = document.getElementById("taskModal");
@@ -21,65 +23,99 @@ const form = document.querySelector(".add-task-form");
 const tableBody = document.getElementById("taskTableBody");
 
 const addTaskBtn = document.getElementById("AddTask");
-
-// Modal title
 const modalTitle = document.getElementById("modalTitle");
 
-// DELETE CONFIRMATION MODAL
+// Delete modal
 const confirmModal = document.getElementById("confirmModal");
 const cancelDelete = document.getElementById("cancelDelete");
 const confirmDeleteBtn = document.getElementById("confirmDelete");
 
 let rowToDelete = null;
-
-// TRACK EDIT MODE
 let editingRow = null;
 
 
-// =====================================
-// UPCOMING DEADLINES
-// =====================================
+// ===============================
+// TASK OVERVIEW ELEMENTS
+// ===============================
+const completedCountEl = document.getElementById("completedCount");
+const progressCountEl = document.getElementById("progressCount");
+const overdueCountEl = document.getElementById("overdueCount");
+const progressPercentEl = document.getElementById("progressPercent");
+const progressCircle = document.getElementById("progressCircle");
 
+
+// ===============================
+// SMOOTH PROGRESS ANIMATION
+// ===============================
+function animateProgressCircle(targetPercent) {
+
+    let start = 0;
+    const duration = 800; // animation speed (ms)
+    const startTime = performance.now();
+
+    function animate(now) {
+
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        const currentPercent = Math.round(progress * targetPercent);
+
+        // text update
+        progressPercentEl.textContent = `${currentPercent}%`;
+
+        // circle update
+        progressCircle.style.background = `
+            conic-gradient(
+                var(--color-primary) 0% ${currentPercent}%,
+                var(--color-info-light) ${currentPercent}% 100%
+            )
+        `;
+
+        if (progress < 1) {
+            requestAnimationFrame(animate);
+        }
+    }
+
+    requestAnimationFrame(animate);
+}
+
+
+// ===============================
+// UPCOMING DEADLINES
+// ===============================
 function updateUpcomingDeadlines() {
 
-    const deadlineContainer =
-        document.getElementById("upcomingDeadlinesList");
-
+    const deadlineContainer = document.getElementById("upcomingDeadlinesList");
     if (!deadlineContainer) return;
 
     deadlineContainer.innerHTML = "";
+    void deadlineContainer.offsetHeight;
 
     const rows = tableBody.querySelectorAll("tr");
 
-    const today = new Date();
-
+    const now = new Date();
     let upcomingFound = false;
 
     rows.forEach(row => {
+
+        const status = row.getAttribute("data-status");
+
+        if (status?.toLowerCase() !== "in progress") return;
 
         const taskName = row.cells[0].textContent;
         const eventArea = row.cells[1].textContent;
         const assignedTo = row.cells[2].textContent;
 
-        const dueDateString = row.cells[3].textContent;
-        const dueDate = new Date(dueDateString);
-
-        const status = row.getAttribute("data-status");
-
-        // Skip completed tasks
-        if (status !== "In Progress") {
-            return;
-        }
+        const dueDate = new Date(row.cells[3].textContent);
 
         const daysRemaining =
-            Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+            Math.ceil((dueDate - now) / (1000 * 60 * 60 * 24));
 
         if (daysRemaining >= 0 && daysRemaining <= 7) {
 
             upcomingFound = true;
 
             const deadlineItem = document.createElement("div");
-
             deadlineItem.classList.add("deadline-item");
 
             deadlineItem.innerHTML = `
@@ -102,57 +138,75 @@ function updateUpcomingDeadlines() {
 }
 
 
-// OPEN MODAL (ADD MODE)
+// ===============================
+// TASK OVERVIEW
+// ===============================
+function updateTaskOverview() {
+
+    const rows = tableBody.querySelectorAll("tr");
+
+    let completed = 0;
+    let inProgress = 0;
+    let overdue = 0;
+
+    rows.forEach(row => {
+
+        const status = row.getAttribute("data-status");
+
+        if (status === "Completed") completed++;
+        else if (status === "In Progress") inProgress++;
+        else if (status === "Overdue") overdue++;
+    });
+
+    const total = completed + inProgress + overdue;
+
+    const percent = total === 0
+        ? 0
+        : Math.round((completed / total) * 100);
+
+    completedCountEl.textContent = completed;
+    progressCountEl.textContent = inProgress;
+    overdueCountEl.textContent = overdue;
+
+    // 🔥 smooth animation instead of instant change
+    animateProgressCircle(percent);
+}
+
+
+// ===============================
+// MODAL CONTROLS
+// ===============================
 openModal.addEventListener("click", () => {
-
     modal.classList.add("active");
-
     editingRow = null;
     form.reset();
 
-    addTaskBtn.innerHTML =
-        'Add Task <i class="ri-add-large-line"></i>';
-
+    addTaskBtn.innerHTML = 'Add Task <i class="ri-add-large-line"></i>';
     modalTitle.textContent = "Add Task";
 });
 
-
-// CLOSE MODAL
 closeModal.addEventListener("click", () => {
-
     modal.classList.remove("active");
-
     editingRow = null;
     form.reset();
 
-    addTaskBtn.innerHTML =
-        'Add Task <i class="ri-add-large-line"></i>';
-
+    addTaskBtn.innerHTML = 'Add Task <i class="ri-add-large-line"></i>';
     modalTitle.textContent = "Add Task";
 });
 
 
-// SUBMIT FORM (ADD + EDIT)
+// ===============================
+// SUBMIT FORM
+// ===============================
 form.addEventListener("submit", function (e) {
-
     e.preventDefault();
 
-    const taskName =
-        document.getElementById("task-name").value;
+    const taskName = document.getElementById("task-name").value;
+    const eventArea = document.getElementById("event-area").value;
+    const assignedTo = document.getElementById("assigned-to").value;
+    const dueDate = document.getElementById("due-date").value;
+    const status = document.getElementById("status").value;
 
-    const eventArea =
-        document.getElementById("event-area").value;
-
-    const assignedTo =
-        document.getElementById("assigned-to").value;
-
-    const dueDate =
-        document.getElementById("due-date").value;
-
-    const status =
-        document.getElementById("status").value;
-
-    // EDIT MODE
     if (editingRow) {
 
         editingRow.cells[0].textContent = taskName;
@@ -160,22 +214,28 @@ form.addEventListener("submit", function (e) {
         editingRow.cells[2].textContent = assignedTo;
         editingRow.cells[3].textContent = dueDate;
 
-        editingRow.setAttribute("data-status", status);
+        // IMPORTANT: normalize status
+        const cleanStatus = status.trim();
 
+        editingRow.setAttribute("data-status", cleanStatus);
+
+        // FORCE FULL REBUILD of status cell (fix visual bug)
         editingRow.cells[4].innerHTML = `
-            <span class="status ${status.toLowerCase().replace(/\s/g, '-')}">
+            <span class="status ${cleanStatus.toLowerCase().replace(/\s/g, '-')}">
                 <i class="ri-circle-fill status-icon"></i>
-                ${status}
+                ${cleanStatus}
             </span>
         `;
 
         editingRow = null;
 
+        // 🔥 FORCE UI REFRESH
+        updateUpcomingDeadlines();
+        updateTaskOverview();
+
     } else {
 
-        // ADD MODE
         const row = document.createElement("tr");
-
         row.setAttribute("data-status", status);
 
         row.innerHTML = `
@@ -183,54 +243,42 @@ form.addEventListener("submit", function (e) {
             <td>${eventArea}</td>
             <td>${assignedTo}</td>
             <td>${dueDate}</td>
-
             <td>
                 <span class="status ${status.toLowerCase().replace(/\s/g, '-')}">
                     <i class="ri-circle-fill status-icon"></i>
                     ${status}
                 </span>
             </td>
-
             <td class="action-buttons">
-                <button class="edit-btn">
-                    <i class="ri-edit-line"></i>
-                </button>
-
-                <button class="delete-btn">
-                    <i class="ri-delete-bin-line"></i>
-                </button>
+                <button class="edit-btn"><i class="ri-edit-line"></i></button>
+                <button class="delete-btn"><i class="ri-delete-bin-line"></i></button>
             </td>
         `;
 
         tableBody.appendChild(row);
     }
 
-    // Reset UI
     form.reset();
     modal.classList.remove("active");
 
-    addTaskBtn.innerHTML =
-        'Add Task <i class="ri-add-large-line"></i>';
-
+    addTaskBtn.innerHTML = 'Add Task <i class="ri-add-large-line"></i>';
     modalTitle.textContent = "Add Task";
 
-    // UPDATE UPCOMING DEADLINES
     updateUpcomingDeadlines();
+    updateTaskOverview();
 });
 
 
-// TABLE ACTIONS (EDIT + DELETE)
+// ===============================
+// TABLE ACTIONS
+// ===============================
 tableBody.addEventListener("click", function (e) {
 
-    // DELETE
     if (e.target.closest(".delete-btn")) {
-
         rowToDelete = e.target.closest("tr");
-
         confirmModal.classList.add("active");
     }
 
-    // EDIT
     if (e.target.closest(".edit-btn")) {
 
         editingRow = e.target.closest("tr");
@@ -252,35 +300,34 @@ tableBody.addEventListener("click", function (e) {
 
         modal.classList.add("active");
 
-        addTaskBtn.innerHTML =
-            'Save Changes <i class="ri-save-line"></i>';
-
+        addTaskBtn.innerHTML = 'Save Changes <i class="ri-save-line"></i>';
         modalTitle.textContent = "Edit Task";
     }
 });
 
 
-// CANCEL DELETE
+// ===============================
+// DELETE
+// ===============================
 cancelDelete.addEventListener("click", () => {
-
     confirmModal.classList.remove("active");
     rowToDelete = null;
 });
 
-
-// CONFIRM DELETE
 confirmDeleteBtn.addEventListener("click", () => {
 
-    if (rowToDelete) {
-        rowToDelete.remove();
-    }
+    if (rowToDelete) rowToDelete.remove();
 
     updateUpcomingDeadlines();
+    updateTaskOverview();
 
     confirmModal.classList.remove("active");
     rowToDelete = null;
 });
 
 
+// ===============================
 // INITIAL LOAD
+// ===============================
 updateUpcomingDeadlines();
+updateTaskOverview();
