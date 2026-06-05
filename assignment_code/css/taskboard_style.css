@@ -604,6 +604,35 @@ main .recent-tasks a{
     background: var(--color-danger);
 }
 
+.progress-circle {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    position: relative;
+
+    background: conic-gradient(
+        var(--color-primary) 0deg,
+        var(--color-info-light) 0deg
+    );
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    transition: background 0.3s ease;
+}
+
+.progress-circle span {
+    position: relative;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-dark);
+}
+
+#progressPercent{
+    transition: all 0.4s ease;
+}
+
 /*ADD TASKS*/
 /* right side controls container */
 .recent-tasks-header{
