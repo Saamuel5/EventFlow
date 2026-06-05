@@ -22,9 +22,8 @@ const tableBody = document.getElementById("taskTableBody");
 
 const addTaskBtn = document.getElementById("AddTask");
 
-// ✅ NEW: modal title
+// Modal title
 const modalTitle = document.getElementById("modalTitle");
-
 
 // DELETE CONFIRMATION MODAL
 const confirmModal = document.getElementById("confirmModal");
@@ -37,43 +36,121 @@ let rowToDelete = null;
 let editingRow = null;
 
 
+// =====================================
+// UPCOMING DEADLINES
+// =====================================
+
+function updateUpcomingDeadlines() {
+
+    const deadlineContainer =
+        document.getElementById("upcomingDeadlinesList");
+
+    if (!deadlineContainer) return;
+
+    deadlineContainer.innerHTML = "";
+
+    const rows = tableBody.querySelectorAll("tr");
+
+    const today = new Date();
+
+    let upcomingFound = false;
+
+    rows.forEach(row => {
+
+        const taskName = row.cells[0].textContent;
+        const eventArea = row.cells[1].textContent;
+        const assignedTo = row.cells[2].textContent;
+
+        const dueDateString = row.cells[3].textContent;
+        const dueDate = new Date(dueDateString);
+
+        const status = row.getAttribute("data-status");
+
+        // Skip completed tasks
+        if (status !== "In Progress") {
+            return;
+        }
+
+        const daysRemaining =
+            Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+
+        if (daysRemaining >= 0 && daysRemaining <= 7) {
+
+            upcomingFound = true;
+
+            const deadlineItem = document.createElement("div");
+
+            deadlineItem.classList.add("deadline-item");
+
+            deadlineItem.innerHTML = `
+                <p><b>${taskName}</b></p>
+                <small class="text-muted">${eventArea}</small><br>
+                <small class="text-muted">
+                    Assigned to ${assignedTo} • Due in ${daysRemaining}
+                    day${daysRemaining !== 1 ? "s" : ""}
+                </small>
+            `;
+
+            deadlineContainer.appendChild(deadlineItem);
+        }
+    });
+
+    if (!upcomingFound) {
+        deadlineContainer.innerHTML =
+            `<p class="text-muted">No upcoming deadlines.</p>`;
+    }
+}
+
+
 // OPEN MODAL (ADD MODE)
 openModal.addEventListener("click", () => {
+
     modal.classList.add("active");
 
     editingRow = null;
     form.reset();
 
-    addTaskBtn.innerHTML = 'Add Task <i class="ri-add-large-line"></i>';
+    addTaskBtn.innerHTML =
+        'Add Task <i class="ri-add-large-line"></i>';
 
-    // ✅ NEW
     modalTitle.textContent = "Add Task";
 });
 
 
 // CLOSE MODAL
 closeModal.addEventListener("click", () => {
+
     modal.classList.remove("active");
 
     editingRow = null;
     form.reset();
 
-    addTaskBtn.innerHTML = 'Add Task <i class="ri-add-large-line"></i>';
+    addTaskBtn.innerHTML =
+        'Add Task <i class="ri-add-large-line"></i>';
 
-    // ✅ NEW
     modalTitle.textContent = "Add Task";
 });
 
 
 // SUBMIT FORM (ADD + EDIT)
 form.addEventListener("submit", function (e) {
+
     e.preventDefault();
 
-    const taskName = document.getElementById("task-name").value;
-    const eventArea = document.getElementById("event-area").value;
-    const assignedTo = document.getElementById("assigned-to").value;
-    const dueDate = document.getElementById("due-date").value;
-    const status = document.getElementById("status").value;
+    const taskName =
+        document.getElementById("task-name").value;
+
+    const eventArea =
+        document.getElementById("event-area").value;
+
+    const assignedTo =
+        document.getElementById("assigned-to").value;
+
+    const dueDate =
+        document.getElementById("due-date").value;
+
+    const status =
+        document.getElementById("status").value;
 
     // EDIT MODE
     if (editingRow) {
@@ -106,12 +183,14 @@ form.addEventListener("submit", function (e) {
             <td>${eventArea}</td>
             <td>${assignedTo}</td>
             <td>${dueDate}</td>
+
             <td>
                 <span class="status ${status.toLowerCase().replace(/\s/g, '-')}">
                     <i class="ri-circle-fill status-icon"></i>
                     ${status}
                 </span>
             </td>
+
             <td class="action-buttons">
                 <button class="edit-btn">
                     <i class="ri-edit-line"></i>
@@ -130,10 +209,13 @@ form.addEventListener("submit", function (e) {
     form.reset();
     modal.classList.remove("active");
 
-    addTaskBtn.innerHTML = 'Add Task <i class="ri-add-large-line"></i>';
+    addTaskBtn.innerHTML =
+        'Add Task <i class="ri-add-large-line"></i>';
 
-    // ✅ NEW
     modalTitle.textContent = "Add Task";
+
+    // UPDATE UPCOMING DEADLINES
+    updateUpcomingDeadlines();
 });
 
 
@@ -170,9 +252,9 @@ tableBody.addEventListener("click", function (e) {
 
         modal.classList.add("active");
 
-        addTaskBtn.innerHTML = 'Save Changes <i class="ri-save-line"></i>';
+        addTaskBtn.innerHTML =
+            'Save Changes <i class="ri-save-line"></i>';
 
-        // ✅ NEW
         modalTitle.textContent = "Edit Task";
     }
 });
@@ -180,6 +262,7 @@ tableBody.addEventListener("click", function (e) {
 
 // CANCEL DELETE
 cancelDelete.addEventListener("click", () => {
+
     confirmModal.classList.remove("active");
     rowToDelete = null;
 });
@@ -192,6 +275,12 @@ confirmDeleteBtn.addEventListener("click", () => {
         rowToDelete.remove();
     }
 
+    updateUpcomingDeadlines();
+
     confirmModal.classList.remove("active");
     rowToDelete = null;
 });
+
+
+// INITIAL LOAD
+updateUpcomingDeadlines();
