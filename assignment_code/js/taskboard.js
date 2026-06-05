@@ -43,6 +43,7 @@ const overdueCountEl = document.getElementById("overdueCount");
 const progressPercentEl = document.getElementById("progressPercent");
 const progressCircle = document.getElementById("progressCircle");
 
+const taskFilter = document.querySelector(".task-filter");
 
 // ===============================
 // SMOOTH PROGRESS ANIMATION
@@ -232,6 +233,7 @@ form.addEventListener("submit", function (e) {
         // 🔥 FORCE UI REFRESH
         updateUpcomingDeadlines();
         updateTaskOverview();
+        filterTasks();
 
     } else {
 
@@ -266,6 +268,7 @@ form.addEventListener("submit", function (e) {
 
     updateUpcomingDeadlines();
     updateTaskOverview();
+    filterTasks();
 });
 
 
@@ -320,10 +323,33 @@ confirmDeleteBtn.addEventListener("click", () => {
 
     updateUpcomingDeadlines();
     updateTaskOverview();
+    filterTasks();
 
     confirmModal.classList.remove("active");
     rowToDelete = null;
 });
+
+function filterTasks() {
+
+    const selectedFilter = taskFilter.value;
+    const rows = tableBody.querySelectorAll("tr");
+
+    rows.forEach(row => {
+
+        const status = row.getAttribute("data-status");
+
+        if (
+            selectedFilter === "All Tasks" ||
+            status === selectedFilter
+        ) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+}
+
+taskFilter.addEventListener("change", filterTasks);
 
 // ===============================
 // LOGOUT MODAL
@@ -352,3 +378,4 @@ confirmLogout.addEventListener("click", () => {
 // ===============================
 updateUpcomingDeadlines();
 updateTaskOverview();
+filterTasks();
