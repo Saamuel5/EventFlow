@@ -717,7 +717,7 @@ main .recent-tasks a{
 .wrapper{
     position: relative;
     width: 430px;
-    height: 600px;
+    height: 650px;
     background-color: var(--color-white);
     border-radius: 15px;
     padding: 120px 32px 64px;
@@ -839,7 +839,36 @@ main .recent-tasks a{
     color: var(--color-dark);
 }
 
+.selected-users {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
 
+.chips-container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.user-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 20px;
+    background: var(--color-primary-light2);
+    color: var(--color-primary);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.user-chip i {
+    cursor: pointer;
+    font-size: 0.9rem;
+}
 
 .btn-submit{
     display: flex;

@@ -118,14 +118,18 @@
                             <i class="ri-calendar-event-line icon"></i>
                         </div>
 
-                        <!--ASSIGNED TO-->
-                        <div class="input-box">
-                            <select class="input-field" id="assigned-to" required>
+                        <!-- ASSIGNED TO (CHIPS + SELECT) -->
+                        <div class="input-box assigned-wrapper">
+
+                            <div id="selected-users" class="chips-container"></div>
+
+                            <select class="input-field" id="assigned-to">
                                 <option value="">Select User</option>
                                 <option value="Ali">Ali</option>
                                 <option value="Sarah">Sarah</option>
                                 <option value="John">John</option>
                             </select>
+
                             <i class="ri-user-line icon"></i>
                         </div>
 
