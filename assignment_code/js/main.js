@@ -170,7 +170,7 @@ loginForm.addEventListener("submit", (e) => {
     const password = document.getElementById("login_password")
 
     if (email.value && password.value) {
-        window.location.href = "dashboard2.html"
+        window.location.href = "taskboard.html"
     }
 })
 
@@ -184,7 +184,7 @@ signupForm.addEventListener("submit", (e) => {
     const password = document.getElementById("signup_password")
 
     if (firstName.value && password.value) {
-        window.location.href = "dashboard2.html"
+        window.location.href = "taskboard.html"
     }
 })
 
