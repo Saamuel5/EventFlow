@@ -199,6 +199,7 @@ Each team member is assigned at least two GitHub issues.
 Example issues:
 
 - Setup GitHub repository and README
+- Create Scrum Board in GitHub Projects
 - Design login and register page
 - Develop create task feature
 - Develop task list display
@@ -206,7 +207,9 @@ Example issues:
 - Develop delete task feature
 - Implement task completion status
 - Implement task filtering by status
-
+- Implement Logout Feature
+- Implement Task Statistics Dashboard
+- Implement Task Status Tracking Feature
 ---
 
 ## Pull Request Workflow
