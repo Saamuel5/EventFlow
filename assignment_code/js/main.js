@@ -188,4 +188,3 @@ signupForm.addEventListener("submit", (e) => {
     }
 })
 
-/*DASHBOARD*/
