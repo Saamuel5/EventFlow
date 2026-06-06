@@ -11,6 +11,31 @@ const options = {
 
 currentDate.textContent = today.toLocaleDateString("en-US", options);
 
+// CLOSE BTN
+const sideMenu = document.querySelector("aside");
+const menuBtn = document.querySelector("#menu-btn");
+const closeBtn = document.querySelector("#close-btn");
+
+//DARK THEME
+const themeToggler = document.querySelector(".theme-toggler");
+
+// SHOW SIDEBAR
+menuBtn.addEventListener('click', () =>{
+    sideMenu.style.display = 'block';
+})
+
+// CLOSE SIDEBAR
+closeBtn.addEventListener('click', () => {
+    sideMenu.style.display = 'none';
+})
+
+//CHANGE TO DARK THEME
+themeToggler.addEventListener('click', () =>{
+    document.body.classList.toggle('dark-theme-variables');
+
+    themeToggler.querySelector('i:nth-child(1)').classList.toggle('active');
+    themeToggler.querySelector('i:nth-child(2)').classList.toggle('active');
+})
 
 // ===============================
 // DOM ELEMENTS
@@ -337,6 +362,8 @@ tableBody.addEventListener("click", function (e) {
 
         modal.classList.add("active");
         addTaskBtn.innerHTML = "Save Changes";
+
+        modalTitle.textContent = "Edit Task";
     }
 });
 
@@ -384,6 +411,27 @@ function filterTasks() {
 
 taskFilter.addEventListener("change", filterTasks);
 
+// ===============================
+// LOGOUT MODAL
+// ===============================
+
+const logoutBtn = document.getElementById("logoutBtn");
+const logoutModal = document.getElementById("logoutModal");
+const cancelLogout = document.getElementById("cancelLogout");
+const confirmLogout = document.getElementById("confirmLogout");
+
+logoutBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    logoutModal.classList.add("active");
+});
+
+cancelLogout.addEventListener("click", () => {
+    logoutModal.classList.remove("active");
+});
+
+confirmLogout.addEventListener("click", () => {
+    window.location.href = "index.html"; // or login page
+});
 
 // ===============================
 // INIT
