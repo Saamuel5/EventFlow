@@ -178,14 +178,17 @@ The `main` branch is used as the stable branch. Each feature is developed in a s
 
 Example branches:
 
-- `feature-register`
-- `feature-login`
-- `feature-create-task`
-- `feature-view-task`
-- `feature-edit-task`
-- `feature-delete-task`
-- `feature-task-status`
-- `feature-filter-task`
+- `authentication-ui`
+- `create-task`
+- `update-task`
+- `delete-task`
+- `upcoming-deadlines`
+- `task-overview`
+- `logout-function`
+- `filters`
+- `table-improvements`
+- `add-multiple-users`
+- `dark-mode`
 
 ---
 
@@ -252,7 +255,7 @@ The project uses release tags to show progress between iterations.
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/event-flow.git
+git clone https://github.com/Saamuel5/EventFlow.git
 ```
 
 2. Open the project folder in Visual Studio Code.
